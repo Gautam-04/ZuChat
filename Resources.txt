@@ -1,0 +1,15 @@
+Roboto Mono Font, Monserrat and Lugrasimo
+
+@import url('https://fonts.googleapis.com/css2?family=Lugrasimo&family=Montserrat&family=Roboto+Mono:wght@300&display=swap');
+
+font-family: 'Lugrasimo', cursive;
+font-family: 'Montserrat', sans-serif;
+font-family: 'Roboto Mono', monospace;
+
+Color Combination
+#A13CF4 Main Color
+#DEE9EF 2nd Color
+#F9FBFC Shade of white
+#A498BD For icons
+#5D7EEC To grab attention on buttons
+#E78948 Extra Color

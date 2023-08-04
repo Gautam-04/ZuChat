@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Lugrasimo&family=Montserrat&family=Roboto+Mono:wght@300&display=swap');
 .Header{
-    background-color:#A498BD;
+    background: linear-gradient(135deg, #A13CF4, #E78948);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -21,7 +21,7 @@
         font-size: 32px;
         font-weight: 600;
         font-family: 'Lugrasimo', cursive;
-        color: #A13CF4;
+        color: #000;
     }
 
     .title:hover{

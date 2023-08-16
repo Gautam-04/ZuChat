@@ -23,18 +23,12 @@ function App() {
 
   const router = createBrowserRouter([
     {
-      path: "/home",
-      element: <Layout />,
-      // children: [
-      //   {
-      //     path: "/products/:id",
-      //     element:"",
-      //   },
-      // ],
-    },
-    {
       path: "/",
       element: <Login />,
+    },
+    {
+      path: "/home",
+      element: <Layout />,
     },
   ]);
 

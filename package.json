@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/Gautam-04/ZuChat/issues"
   },
-  "homepage": "https://github.com/Gautam-04/ZuChat#readme"
+  "homepage": "https://github.com/Gautam-04/ZuChat#readme",
+  "dependencies": {
+    "@chakra-ui/icons": "^2.1.0"
+  }
 }

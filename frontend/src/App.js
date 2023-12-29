@@ -1,12 +1,12 @@
 import Main from "./pages/Mainpage/Main";
-import Login from "./pages/login/Login";
 import { Routes,Route } from "react-router-dom";
+import LoginPage from "./pages/login/LoginPage";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<LoginPage />} />
         <Route path="/chats" element={<Main />} />
       </Routes>
     </>

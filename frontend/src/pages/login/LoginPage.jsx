@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import LoginForm from '../../components/login/LoginForm';
-import SignUp from '../../components/signup/SignUp';
+import Login from '../../components/Authentication/Login';
+import Signup from '../../components/Authentication/Signup';
 import {
   Box,
   Container,
@@ -14,7 +14,7 @@ import {
 import './Login.scss'
 import { useNavigate } from 'react-router-dom';
 
-export default function Login() {
+export default function LoginPage() {
 
     const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ export default function Login() {
     <section className="login">
       <Container maxW="xl" centerContent>
         <Box
-          d="flex"
+          display="flex"
           justifyContent="center"
           alignItems="center"
           p={3}
@@ -51,7 +51,7 @@ export default function Login() {
           <Tabs variant="soft-rounded">
             <TabList
               alignItems="center"
-              d="flex"
+              display="flex"
               justifyContent="center"
               mb={2}
             >
@@ -60,10 +60,10 @@ export default function Login() {
             </TabList>
             <TabPanels>
               <TabPanel>
-                <LoginForm />
+                <Login />
               </TabPanel>
               <TabPanel>
-                <SignUp />
+                <Signup />
               </TabPanel>
             </TabPanels>
           </Tabs>

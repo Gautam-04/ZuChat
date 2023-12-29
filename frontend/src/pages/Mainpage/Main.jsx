@@ -1,28 +1,25 @@
-import React from 'react'
-import { Box } from '@chakra-ui/react';
-import { ChatState } from '../../Context/ChatProvider'
-import SideSearch from '../../components/MainPage/SideSearch';
-import Chats from '../../components/MainPage/Chats'
-import ChatArea from '../../components/MainPage/ChatArea'
-const ChatPage = () => {
-  const {user} = ChatState();
-}
+import { Box } from "@chakra-ui/layout";
+import { useState } from "react";
+import Chatbox from "../../components/Chatbox";
+import MyChats from "../../components/MyChats";
+import SideDrawer from "../../components/miscellaneous/SideDrawer";
+import { ChatState } from "../../Context/ChatProvider";
 
-function Main() {
+const Chatpage = () => {
+  const [fetchAgain, setFetchAgain] = useState(false);
+  const { user } = ChatState();
+
   return (
     <div style={{ width: "100%" }}>
-      {/* When backend is done */}
-      {/* {user && <SideSearch />} */}
-      {/* {user && <Chats />} */}
-      {/* {user && <ChatArea />} */}
-      <SideSearch />
-      <Box display="flex"
-       justifyContent="space-between" w="100%" h="91.5vh" p="10px">
-        <Chats />
-        <ChatArea />
+      {user && <SideDrawer />}
+      <Box display="flex" justifyContent="space-between" w="100%" h="91.5vh" p="10px">
+        {user && <MyChats fetchAgain={fetchAgain} />}
+        {user && (
+          <Chatbox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+        )}
       </Box>
     </div>
   );
-}
+};
 
-export default Main
+export default Chatpage;

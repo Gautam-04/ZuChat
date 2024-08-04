@@ -54,4 +54,83 @@ return res.status(200).cookie("accessToken",accessToken,options).json({message: 
 
 }
 
-export {registerUser}
+const loginUser = async(req,res)=>{
+const {email,username,password} = req.body;
+
+
+const existedUser = await User.findOne({
+    $or: [{email},{username}]
+})
+
+if(!existedUser){
+    return res.status(400).json({message: "User does not exist by this username/email", errorData: "User does Not exist"})
+}
+
+const isPasswordValid = await existedUser.matchPassword(password);
+
+if(!isPasswordValid){
+    return res.status(400).json({message: "Password is incorrect", errorData: "Password is incorrect"})
+}
+
+const options = {
+        httpOnly: true,
+        secure: true,
+}
+
+const loggedInUser = await User.findById(existedUser._id).select("-password")
+
+const accessToken = generateToken(loggedInUser._id);
+
+return res.status(200).cookie("accessToken",accessToken,options).json({message: "User Found Successfully",loggedInUser})
+}
+
+const updateAccountDetails = async(req,res) => {
+const {email,username,dob} = req.body;
+
+// if (!username || !email || !dob) {
+//         return res.status(400).json({message: 'All fields are Required'})
+//     }
+
+const user = await User.findByIdAndUpdate(req.user?._id,{
+    $set: {
+        email: email,
+        username: username,
+        dob: dob,
+    }
+},{new: true}).select("-password");
+
+return res.status(200).json({message: 'Details have been updated',user})
+}
+
+const updateAvatar = async(req,res) => {
+const avatarFilePath = req.files?.avatar[0]?.path;
+
+if(!avatarFilePath){
+    return res.status(400).json({message: "Avatar file is missing"});
+}
+
+const avatar = await UploadToCloudinary(avatarFilePath);
+if(!avatar.url){
+    return res.status(400).json({message: 'Error while uploading'})
+}
+    const user = await User.findByIdAndUpdate(req.user?._id,{
+        $set:{avatar: avatar.url}
+    },
+{new: true}).select("-password");
+
+return res.status(200).json({message: 'Avatar changes successfully',user})
+}
+
+const logout = async(req,res)=>{
+const options = {
+        httpOnly: true,
+        secure: true,
+    };
+
+    return res
+        .status(200)
+        .clearCookie("accessToken", options)
+        .json({message: "LoggedOut Successfully"});
+}
+
+export {registerUser,loginUser,updateAccountDetails,updateAvatar,logout}

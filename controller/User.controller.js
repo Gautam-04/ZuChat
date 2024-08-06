@@ -133,4 +133,21 @@ const options = {
         .json({message: "LoggedOut Successfully"});
 }
 
-export {registerUser,loginUser,updateAccountDetails,updateAvatar,logout}
+const searchUser = async(req,res)=>{
+const {email} = req.body;
+
+if(!email){
+    return res.status(400).json({message: "Email is empty",errorData:"Email is empty"});
+}
+
+const user = await User.findOne({email}).select("-password")
+
+if(!user){
+    return res.status(400).json({message: "User does Not exists",errorData:"User does Not exists"});
+}
+
+
+return res.status(200).json({message: "User exists",user})
+}
+
+export {registerUser,loginUser,updateAccountDetails,updateAvatar,logout,searchUser}

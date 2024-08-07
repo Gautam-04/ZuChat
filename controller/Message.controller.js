@@ -1,0 +1,48 @@
+import { Message } from "../model/message.model.js"
+
+
+const allMessages = async(req,res)=>{
+try {
+    const messages = await Message.find({chat: req.params.chatId}).populate("sender", "name pic email").populate("chat")
+    return res.status(200).json({message: "Messages loaded successfully",messages})
+} catch (error) {
+    console.log("Error in getting message from connection")
+    return res.status(400).json({message: "There is a error in backend",error})
+}
+}
+
+const sendMessage = async(req,res) => {
+const {content,chatId} = req.body;
+if(!content || !chatId){
+    console.log("Invalid data passed into request");
+    return res.status(400).json({message: "Content/ChatId is necessary"});
+}
+
+var newMessage = {
+    sender: req.user?._id,
+    content: content,
+    chat: chatId
+}
+
+try {
+    var message = await Message.create(newMessage);
+
+    message = await message.populate("sender","name pic").execPopulate();
+    message = await message.populate("chat").execPopulate();
+    message = await User.populate(message, {
+      path: "chat.users",
+      select: "name pic email",
+    });
+
+    await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message });
+
+    return res.status(200).json({message: "Message send succesfully",message})
+} catch (error) {
+    console.log("Error in sending message from connection")
+    return res.status(400).json({message: "There is a error in sending message",error})
+}
+
+
+}
+
+export {allMessages,sendMessage}

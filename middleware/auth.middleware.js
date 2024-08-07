@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 import { User } from "../model/user.model.js";
 
-const Auththentication = async(req,res,next) => {
+const Authentication = async(req,res,next) => {
     const userId = req.cookies?.accessToken;
 
     if(!userId){
@@ -20,4 +20,4 @@ const Auththentication = async(req,res,next) => {
     next();
 }
 
-export {Auththentication}
+export {Authentication}

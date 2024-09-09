@@ -63,7 +63,7 @@ const createGroupChats = async(req,res) => {
         return res.status(400).json({message: 'There is no user to create a group'})
     }
 
-    var users = JSON.parse(req.body.users);
+    var users = req.body.users;
 
     if(users.length < 2){
         return res.status(400).json({message: "Group can be created in more than 2 members"});
@@ -83,7 +83,7 @@ const createGroupChats = async(req,res) => {
             return res.status(400).json({message: "groupchat not created"})
         }
 
-        const fullGroupChat = await Chat.findOne({id: groupChat._id}).populate("users", "-password").populate("groupAdmin", "-password")
+        const fullGroupChat = await Chat.findOne({_id: groupChat._id}).populate("users", "-password").populate("groupAdmin", "-password")
 
         return res.status(200).json({message: "Groupd created successfully", fullGroupChat})
 
@@ -108,9 +108,9 @@ const renameGroupChats = async(req,res) => {
 ).populate("users", "-password").populate("groupAdmin","-password")
 
 if(updatedChat){
-    return res.status(200).message({message: "Groupname updated successfully"})
+    return res.status(200).json({message: "Groupname updated successfully"})
 }else{
-    return res.status(400).message({message: "Groupname not updated"})
+    return res.status(400).json({message: "Groupname not updated"})
 }
 }
 
@@ -128,9 +128,9 @@ const addMembers = async (req,res) => {
     }).populate("users","-password").populate("groupAdmin","-password")
 
     if(addChat){
-        return res.status(200).json({message: "User removed succesfully",addChat})
+        return res.status(200).json({message: "User added succesfully",addChat})
     }else{
-        return res.status(400).json({message: "User not removed"})
+        return res.status(400).json({message: "User not added"})
     }
 }
 

@@ -1,0 +1,10 @@
+{
+    "name": "sechatapp",
+    "version": "1.0.0",
+    "scripts": {
+        "start": "concurrently \"cd server && npm run dev\" \"cd frontend && npm start\""
+    },
+    "devDependencies": {
+        "concurrently": "^7.0.0"
+    }
+}

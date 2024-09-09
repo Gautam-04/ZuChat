@@ -1,5 +1,6 @@
 import { Message } from "../model/message.model.js"
-
+import { User } from "../model/user.model.js"
+import { Chat } from "../model/chat.model.js"
 
 const allMessages = async(req,res)=>{
 try {
@@ -27,8 +28,8 @@ var newMessage = {
 try {
     var message = await Message.create(newMessage);
 
-    message = await message.populate("sender","name pic").execPopulate();
-    message = await message.populate("chat").execPopulate();
+    message = await message.populate("sender","name pic");
+    message = await message.populate("chat");
     message = await User.populate(message, {
       path: "chat.users",
       select: "name pic email",
@@ -39,7 +40,7 @@ try {
     return res.status(200).json({message: "Message send succesfully",message})
 } catch (error) {
     console.log("Error in sending message from connection")
-    return res.status(400).json({message: "There is a error in sending message",error})
+    return res.status(400).json({message: `There is a error in sending message ${error}`})
 }
 
 

@@ -1,3 +1,5 @@
+@import url("./variable.css");
+
 * {
   margin: 0;
   padding: 0;
@@ -6,4 +8,26 @@
 html,
 body {
   overflow-x: hidden;
+  background-color: var(--primary);
+}
+
+/* HEADER CSS */
+.HeaderCompleteDiv {
+  display: flex;
+  width: auto;
+  padding: 0.9375rem 0rem 1rem 0rem;
+  justify-content: center;
+  align-items: center;
+  background: var(--white);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.HeaderTitle {
+  color: var(--secondary-accent1);
+  font-family: Outfit;
+  font-size: 3rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
 }

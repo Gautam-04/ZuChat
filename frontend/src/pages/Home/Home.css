@@ -1,0 +1,104 @@
+@import url('../../variable.css');
+
+.home_screen_maindiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 4.56rem;
+    padding: 0 5.37rem;
+}
+
+.home_screen_1div {
+    width: 100%;
+}
+
+.Home_screen_title {
+    font-family: Outfit;
+    font-size: 5rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: capitalize;
+    margin-bottom: 3rem;
+
+    span {
+        color: var(--secondary-accent1);
+    }
+}
+
+.InnerContent {
+    font-family: Outfit;
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: capitalize;
+    padding-left: 2rem;
+    border-left: 1px solid black;
+
+    .secondline {
+        font-size: 1.75rem;
+    }
+}
+
+.home_screen_2div {
+    img {
+        width: 36.8125rem;
+        height: 31.125rem;
+    }
+}
+
+.taglineDiv {
+    width: 36.5625rem;
+    height: 2.4375rem;
+    flex-shrink: 0;
+    margin-top: 3rem;
+    margin-left: 12.5rem;
+    color: #6E00FF;
+    font-family: Outfit;
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.buttonContainer {
+    width: 35%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2.35rem;
+    margin-left: 8.56rem;
+}
+
+.HomeLoginButton {
+    padding: 0.75rem 2.5rem;
+    border-radius: 0.5rem;
+    background: var(--secondary-accent1);
+    color: var(--white);
+    font-family: Outfit;
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.HomeSignUpButton {
+    padding: 0.75rem 2.5rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    border-radius: 0.5rem;
+    background: var(--primary);
+    font-family: Outfit;
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.ultimateHr {
+    margin-top: 2.84rem;
+    height: 0.0625rem;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}

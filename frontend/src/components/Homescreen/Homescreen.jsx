@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import ChatingScreen from '../../assets/undraw_chatting_re_j55r.svg'
+import { Button } from '@chakra-ui/react'
 
 function Homescreen() {
   return (
@@ -18,8 +19,8 @@ function Homescreen() {
         </div>
         <div className="taglineDiv"><p>Lets the conversation begin</p></div>
         <div className="buttonContainer">
-        <Link to="/login"><button className='HomeLoginButton'>Login</button></Link>
-        <Link to="/login"><button className='HomeSignUpButton'>Sign Up</button></Link>
+        <Link to="/login"><Button className='HomeLoginButton'>Login</Button></Link>
+        <Link to="/login"><Button backgroundColor={'grey'} className='HomeSignUpButton'>Sign Up</Button></Link>
         </div>
         <hr className='ultimateHr'/>
     </>

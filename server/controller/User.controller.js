@@ -3,7 +3,7 @@ import { User } from "../model/user.model.js";
 import { generateToken } from "../config/generateToken.js";
 
 const registerUser = async(req,res) => {
-    const {username,email,dob,password} = req.body;
+    const {username,email,dob,password,avatar} = req.body;
 
 
     if([username,email,dob,password].some((field)=>field?.trim === '')){
@@ -22,16 +22,16 @@ const localFileCopy = req.files?.avatar[0]?.path;
 
 const response = await UploadToCloudinary(localFileCopy);
 
-if(!response){
-    return res.status(400).json({message: 'Cannot upload image currently',errorData: 'Cannot upload image currently'});
-}
+// if(!response){
+//     return res.status(400).json({message: 'Cannot upload image currently',errorData: 'Cannot upload image currently'});
+// }
 
 const user = await User.create({
     username,
     email,
     dob,
     password,
-    avatar: response.url
+    avatar: response?.url
 })
 
 const createdUser = await User.findById(user._id).select(

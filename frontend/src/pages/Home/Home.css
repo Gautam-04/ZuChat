@@ -72,29 +72,32 @@
 }
 
 .HomeLoginButton {
-    padding: 0.75rem 2.5rem;
-    border-radius: 0.5rem;
-    background: var(--secondary-accent1);
-    color: var(--white);
-    font-family: Outfit;
-    font-size: 1.125rem;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
+    padding: 1rem 2.5rem !important;
+    border-radius: 0.5rem !important;
+    background: var(--secondary-accent1) !important;
+    color: var(--white) !important;
+    font-family: Outfit !important;
+    font-size: 1.125rem !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    line-height: normal !important;
+}
+
+.HomeLoginButton:hover {
+    background-color: #dd5329 !important;
 }
 
 .HomeSignUpButton {
-    padding: 0.75rem 2.5rem;
-    justify-content: center;
-    align-items: center;
-    gap: 0.625rem;
-    border-radius: 0.5rem;
-    background: var(--primary);
-    font-family: Outfit;
-    font-size: 1.125rem;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
+    padding: 1rem 2.5rem !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0.625rem !important;
+    border-radius: 0.5rem !important;
+    font-family: Outfit !important;
+    font-size: 1.125rem !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    line-height: normal !important;
 }
 
 .ultimateHr {

@@ -1,0 +1,10 @@
+@import url("../../variable.css");
+
+.auth {
+    margin: 2rem;
+}
+
+.RegisterButton {
+    color: var(--white) !important;
+    background-color: var(--secondary-accent2) !important;
+}

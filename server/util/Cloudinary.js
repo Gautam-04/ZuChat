@@ -18,6 +18,7 @@ import fs from "fs"
             fs.unlinkSync(localfilePath)
             return response;
         } catch (error) {
+            console.log(error)
             fs.unlinkSync(localfilePath);
             return null;
         }

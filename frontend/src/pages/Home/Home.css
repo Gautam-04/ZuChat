@@ -100,5 +100,86 @@
 .ultimateHr {
     margin-top: 2.84rem;
     height: 0.0625rem;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 2px 0px rgba(0, 0, 0, 0.25);
+}
+
+.TrustedIcons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 5rem;
+}
+
+.trustedPara {
+    color: #000;
+    font-family: Outfit;
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.IconsDiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 7.5625rem;
+}
+
+.icons {
+    width: 3.3125rem;
+    height: 3.25rem;
+}
+
+.FeaturesMainDiv {
+    margin: 10rem 5.88rem;
+}
+
+.FeaturesDiv1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.ContentDiv {
+    width: 44.1875rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+
+    h1 {
+        color: #F24E1E;
+
+        font-family: Outfit;
+        font-size: 4rem;
+    }
+
+    h4 {
+        color: #000;
+        font-family: Outfit;
+        font-size: 2rem;
+    }
+
+    p {
+        color: #8C7C7C;
+        font-family: Outfit;
+        font-size: 1.125rem;
+    }
+}
+
+.ImageDiv {
+
+    img {
+        width: 23.8125rem;
+        height: 21.5rem;
+    }
+}
+
+.FeaturesDiv2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: row-reverse;
 }

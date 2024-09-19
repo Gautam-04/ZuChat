@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import ChatingScreen from '../../assets/undraw_chatting_re_j55r.svg'
 
 function Homescreen() {
@@ -17,8 +18,8 @@ function Homescreen() {
         </div>
         <div className="taglineDiv"><p>Lets the conversation begin</p></div>
         <div className="buttonContainer">
-            <button className='HomeLoginButton'>Login</button>
-            <button className='HomeSignUpButton'>Sign Up</button>
+        <Link to="/login"><button className='HomeLoginButton'>Login</button></Link>
+        <Link to="/login"><button className='HomeSignUpButton'>Sign Up</button></Link>
         </div>
         <hr className='ultimateHr'/>
     </>

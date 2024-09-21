@@ -3,7 +3,7 @@ import { User } from "../model/user.model.js";
 import { generateToken } from "../config/generateToken.js";
 
 const registerUser = async(req,res) => {
-    const {username,email,dob,password,avatar} = req.body;
+    const {username,email,dob,password} = req.body;
 
 
     if([username,email,dob,password].some((field)=>field?.trim === '')){
@@ -18,13 +18,13 @@ const registerUser = async(req,res) => {
         return res.status(400).json({message: "User already exists pls use different email or username",errorData: "User already exists pls use different email or username"})
     }
 
-const localFileCopy = req.files?.avatar[0]?.path;
+const localFileCopy = req.files?.avatar[0].path;
 
 const response = await UploadToCloudinary(localFileCopy);
 
-// if(!response){
-//     return res.status(400).json({message: 'Cannot upload image currently',errorData: 'Cannot upload image currently'});
-// }
+if(!response){
+    return res.status(400).json({message: 'Cannot upload image currently',errorData: 'Cannot upload image currently',response});
+}
 
 const user = await User.create({
     username,

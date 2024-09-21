@@ -19,7 +19,7 @@ function Register() {
   const [picLoading, setPicLoading] = useState(false);
 
   const toast = useToast();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleShow = () => {setShow(true)}
 //
@@ -38,8 +38,21 @@ function Register() {
     }
 
     try {
-      const data = await axios.post("http://localhost:8000/api/v1/users/register",{username,email,dob,password,avatar});
+      const config = {
+        headers: {
+          "Content-type": "multipart/form-data"
+        }
+      }
+      const data = await axios.post("/api/v1/users/register",{username,email,dob,password,avatar},config);
+      toast({
+        title: "User Created Successfully",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      })
       console.log(data);
+      navigate('/chat');
       setPicLoading(false);
     } catch (error) {
       console.log(error)
@@ -89,7 +102,6 @@ function Register() {
           <FormLabel>Upload your Picture</FormLabel>
           <Input type='file' accept="image/*" onChange={(e)=>{setAvatar(e.target.files[0])}}/>
         </FormControl>
-        {console.log(avatar)}
         <Button className="RegisterButton"
         width="100%"
         style={{ marginTop: 15 }}

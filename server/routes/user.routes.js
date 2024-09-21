@@ -5,12 +5,7 @@ import { Authentication } from "../middleware/auth.middleware.js";
 
 const routes = Router();
 
-routes.route('/register').post(upload.fields([
-    {
-        name: "avatar",
-        maxCount: 1
-    }
-]),registerUser)
+routes.route('/register').post(upload.fields([{name:"avatar",maxCount:1}]),registerUser)
 
 routes.route('/login').post(loginUser)
 

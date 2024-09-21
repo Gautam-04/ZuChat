@@ -4,6 +4,9 @@ import { VStack } from "@chakra-ui/layout";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { Button } from "@chakra-ui/button";
+import { useToast } from "@chakra-ui/toast";
+import axios from "axios"
+import {useNavigate} from 'react-router-dom';
 
 function Login() {
   // const [username, setUsername] = useState("");
@@ -14,9 +17,55 @@ function Login() {
 
   const handleShow = () => {!show}
 
+    const toast = useToast();
+  const navigate = useNavigate();
+
   const submitHandler = async() => {
+
     setPicLoading(true)
+    if ( !email || !password ) {
+      toast({
+        title: "Please Fill all the Feilds",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setPicLoading(false);
+      return;
+    }
+
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json"
+        }
+      }
+      const data = await axios.post("/api/v1/users/login",{email,password},config);
+      toast({
+        title: "User LoggedIn Successfully",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      })
+      console.log(data);
+      navigate('/chat');
+      setPicLoading(false);
+    } catch (error) {
+      console.log(error)
+      toast({
+        title: "Error Occured!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setPicLoading(false);
+    }
   }
+
   return (
     <VStack spacing="5px">
         {/* <FormControl isRequired>

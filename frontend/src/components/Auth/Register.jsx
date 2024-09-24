@@ -52,6 +52,7 @@ function Register() {
         position: "bottom",
       })
       console.log(data);
+      localStorage.setItem('accessToken',data.data.accessToken)
       navigate('/chat');
       setPicLoading(false);
     } catch (error) {

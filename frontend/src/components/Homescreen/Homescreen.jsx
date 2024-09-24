@@ -19,8 +19,8 @@ function Homescreen() {
         </div>
         <div className="taglineDiv"><p>Lets the conversation begin</p></div>
         <div className="buttonContainer">
-        <Link to="/login"><Button className='HomeLoginButton'>Login</Button></Link>
-        <Link to="/login"><Button backgroundColor={'grey'} className='HomeSignUpButton'>Sign Up</Button></Link>
+        <Link to="/auth"><Button className='HomeLoginButton'>Login</Button></Link>
+        <Link to="/auth"><Button backgroundColor={'grey'} className='HomeSignUpButton'>Sign Up</Button></Link>
         </div>
         <hr className='ultimateHr'/>
     </>

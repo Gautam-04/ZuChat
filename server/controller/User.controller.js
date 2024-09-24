@@ -43,14 +43,14 @@ if(!createdUser){
 }
 
 const options = {
-        httpOnly: true,
+        // httpOnly: true,
         secure: true,
     };
 
 const accessToken = generateToken(user._id);
 
 
-return res.status(200).cookie("accessToken",accessToken,options).json({message: "User created succesfully",createdUser})
+return res.status(200).cookie("accessToken",accessToken,options).json({message: "User created succesfully",createdUser,accessToken})
 
 }
 
@@ -73,7 +73,7 @@ if(!isPasswordValid){
 }
 
 const options = {
-        httpOnly: true,
+        // httpOnly: true,
         secure: true,
 }
 
@@ -81,7 +81,7 @@ const loggedInUser = await User.findById(existedUser._id).select("-password")
 
 const accessToken = generateToken(loggedInUser._id);
 
-return res.status(200).cookie("accessToken",accessToken,options).json({message: "User Found Successfully",loggedInUser})
+return res.status(200).cookie("accessToken",accessToken,options).json({message: "User Found Successfully",loggedInUser,accessToken})
 }
 
 const updateAccountDetails = async(req,res) => {

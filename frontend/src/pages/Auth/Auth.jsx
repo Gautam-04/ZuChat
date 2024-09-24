@@ -2,8 +2,21 @@ import {Container,Box,Tabs,TabList,Tab,TabPanels,TabPanel} from '@chakra-ui/reac
 import Login from "../../components/Auth/Login";
 import Register from "../../components/Auth/Register"
 import './Auth.css'
+import { useEffect } from 'react';
+import { ChatState } from '../../Context/ChatContext';
+import { useNavigate } from 'react-router-dom';
 
 function Auth() {
+
+  const navigate = useNavigate()
+
+  const {userId} = ChatState();
+  useEffect(() => {
+    if(userId) navigate('/chat')
+
+  }, [userId,navigate])
+
+
   return (
     <section className="auth">
       <Container maxW="xl" centerContent>

@@ -50,6 +50,7 @@ function Login() {
         position: "bottom",
       })
       console.log(data);
+      localStorage.setItem('accessToken',data.data.accessToken)
       navigate('/chat');
       setPicLoading(false);
     } catch (error) {
@@ -76,7 +77,7 @@ function Login() {
           <FormLabel>Email</FormLabel>
           <Input type='email' placeholder="Enter your unique Email" value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
         </FormControl>  
-        <FormControl id="password" isRequired>
+        <FormControl id="Login-password" isRequired>
         <FormLabel>Password</FormLabel>
         <InputGroup size="md">
           <Input

@@ -45,3 +45,10 @@ body {
     font-weight: 500;
   }
 }
+
+.messages {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow-y: scroll !important;
+  scrollbar-width: none !important;
+}

@@ -24,6 +24,7 @@ function Mychats({fetchAgain}) {
           Authorization: `Bearer ${userId}`
         }
       } 
+      //http://localhost:8000
           const {data} = await axios.get('/api/v1/chat/fetchchat',config);
           setChats(data)
           console.log(data)

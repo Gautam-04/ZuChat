@@ -10,11 +10,12 @@ function Auth() {
 
   const navigate = useNavigate()
 
-  const {userId} = ChatState();
+  const {user} = ChatState();
+  
   useEffect(() => {
-    if(userId) navigate('/chat')
-
-  }, [userId,navigate])
+    if (!user) navigate("/auth")
+      else navigate('/chat')
+  },[])
 
 
   return (

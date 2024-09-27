@@ -14,14 +14,16 @@ function Mychats({fetchAgain}) {
 
     const toast = useToast()
 
-    const {userId,chats,setChats,selectedChat,setSelectedChat} = ChatState();
+    const {user,chats,setChats,selectedChat,setSelectedChat} = ChatState();
+
+    const accessToken = localStorage.getItem("accessToken")
 
     const fetchChats = async() => {
       
         try {
           const config = {
         headers: {
-          Authorization: `Bearer ${userId}`
+          Authorization: `Bearer ${accessToken}`
         }
       } 
       //http://localhost:8000
@@ -82,7 +84,7 @@ function Mychats({fetchAgain}) {
               >
                 <Text>
                   {!chat.isGroupChat
-                    ? getSender(userId, chat.users)
+                    ? getSender(user._id, chat.users)
                     : chat.chatName}
                 </Text>
                 {chat.latestMessage && (

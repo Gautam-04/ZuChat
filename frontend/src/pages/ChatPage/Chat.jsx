@@ -8,9 +8,9 @@ import { useNavigate } from "react-router-dom";
 function Chat() {
   const [fetchAgain, setfetchAgain] = useState(false);
   const navigate = useNavigate()
-  const{userId} = ChatState()
+  const{user} = ChatState()
   useEffect(() => {
-    if(!userId) navigate('/auth')
+    if(!user) navigate('/auth')
   })
   
   return (

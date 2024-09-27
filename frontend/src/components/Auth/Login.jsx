@@ -35,6 +35,7 @@ function Login() {
       return;
     }
 
+
     try {
       const config = {
         headers: {
@@ -51,6 +52,7 @@ function Login() {
       })
       console.log(data);
       localStorage.setItem('accessToken',data.data.accessToken)
+      localStorage.setItem('user',JSON.stringify(data.data.loggedInUser));
       navigate('/chat');
       setPicLoading(false);
     } catch (error) {

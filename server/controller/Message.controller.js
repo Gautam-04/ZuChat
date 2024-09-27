@@ -4,7 +4,7 @@ import { Chat } from "../model/chat.model.js"
 
 const allMessages = async(req,res)=>{
 try {
-    const messages = await Message.find({chat: req.params.chatId}).populate("sender", "name pic email").populate("chat")
+    const messages = await Message.find({chat: req.params.chatId}).populate("sender", "username avatar email").populate("chat")
     return res.status(200).json({message: "Messages loaded successfully",messages})
 } catch (error) {
     console.log("Error in getting message from connection")
@@ -28,16 +28,17 @@ var newMessage = {
 try {
     var message = await Message.create(newMessage);
 
-    message = await message.populate("sender","name pic");
+    message = await message.populate("sender","username avatar");
     message = await message.populate("chat");
     message = await User.populate(message, {
       path: "chat.users",
-      select: "name pic email",
+      select: "username avatar email",
     });
 
+    console.log(message)
     await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message });
 
-    return res.status(200).json({message: "Message send succesfully",message})
+    return res.status(200).json(message)
 } catch (error) {
     console.log("Error in sending message from connection")
     return res.status(400).json({message: `There is a error in sending message ${error}`})

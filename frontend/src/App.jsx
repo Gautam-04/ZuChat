@@ -8,20 +8,12 @@ import { useEffect } from "react"
 
 function App() {
 
-  const {setUserId} = ChatState();
+  const {setUser} = ChatState();
 
   useEffect(() => {
-      setTimeout(() => {
-        if (document.cookie === "") {
-                // Reset the access token if no cookies exist
-                localStorage.setItem("accessToken", ""); // or null
-                console.log("Access token has been reset due to absence of cookies.");
-            }else{
-              const userInfo = localStorage.getItem("accessToken")
-              setUserId(userInfo)
-            }
-      });
-  })
+      const userInfo = JSON.parse(localStorage.getItem("user"));
+      setUser(userInfo);
+  },[])
   
 
   return (

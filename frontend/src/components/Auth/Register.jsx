@@ -53,6 +53,7 @@ function Register() {
       })
       console.log(data);
       localStorage.setItem('accessToken',data.data.accessToken)
+      localStorage.setItem('user',JSON.stringify(data.data.createdUser))
       navigate('/chat');
       setPicLoading(false);
     } catch (error) {

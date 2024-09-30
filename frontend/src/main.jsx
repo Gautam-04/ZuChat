@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
@@ -7,7 +6,6 @@ import {ChakraProvider} from '@chakra-ui/react';
 import ChatProvider from './Context/ChatContext.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
   <ChakraProvider>
   <BrowserRouter>
   <ChatProvider>
@@ -15,5 +13,4 @@ createRoot(document.getElementById('root')).render(
   </ChatProvider>
   </BrowserRouter>
   </ChakraProvider>
-  </StrictMode>,
 )

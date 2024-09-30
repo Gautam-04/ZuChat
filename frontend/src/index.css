@@ -47,8 +47,11 @@ body {
 }
 
 .messages {
-  display: flex !important;
-  flex-direction: column !important;
-  overflow-y: scroll !important;
-  scrollbar-width: none !important;
+  padding: 1rem;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.messages::-webkit-scrollbar {
+  display: none;
 }

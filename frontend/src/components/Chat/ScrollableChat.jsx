@@ -16,7 +16,7 @@ function ScrollableChat({messages}) {
     <ScrollableFeed>
       {messages &&
         messages.map((m, i) => (
-          <div style={{ display: "flex", scrollbarWidth: 'none' }} key={m._id}>
+          <div style={{ display: "flex"}} key={m._id}>
             {(isSameSender(messages, m, i, user._id) ||
               isLastMessage(messages, i, user._id)) && (
               <Tooltip label={m.sender.name} placement="bottom-start" hasArrow>
@@ -32,18 +32,22 @@ function ScrollableChat({messages}) {
             )}
             <span
               style={{
-                backgroundColor: `${
-                  m.sender._id === user._id ? "#6E00FF" : "#B9F5D0"
-                }`,
+                backgroundColor: `${m.sender._id === user._id ? "#6E00FF" : "#E7E7E7"}`,
+                color: `${m.sender._id === user._id ? "#FFF" : "#000"}`,
+                alignSelf: `${m.sender._id === user._id ? "flex-end" : "flex-start"}`,
                 marginLeft: isSameSenderMargin(messages, m, i, user._id),
-                marginTop: isSameUser(messages, m, i, user._id) ? 3 : 10,
-                borderRadius: "20px",
-                padding: "5px 15px",
-                maxWidth: "75%",
+                marginTop: isSameUser(messages, m, i, user._id) ? 5 : 10,
+                borderRadius: `${m.sender._id === user._id ? "15px 15px 0px 15px" : "15px 15px 15px 0px"}`,
+                padding: "8px 12px",
+                maxWidth: "65%",
+                fontSize: "15px",
+                boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.12)",
+                border: `1px solid ${m.sender._id === user._id ? "#DCF8C6" : "#EDEDED"}`,
               }}
-            >
-              {m.content}
-            </span>
+              >
+                {m.content}
+              </span>
+
           </div>
         ))}
     </ScrollableFeed>

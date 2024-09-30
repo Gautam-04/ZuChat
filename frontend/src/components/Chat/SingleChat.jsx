@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import { FormControl } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
@@ -11,12 +10,13 @@ import axios from "axios";
 import {io} from "socket.io-client"
 import { ChatState } from "../../Context/ChatContext";
 import animationData from "../../Animations/typing.json"
-var socket, selectedChatCompare;
+var selectedChatCompare;
 import { SlLogout } from "react-icons/sl";
 import ScrollableChat from "./ScrollableChat";
 import ProfileModal from "../miscellaneous/ProfileModal";
 import Lottie from "react-lottie";
 const ENDPOINT = "http://localhost:8000";
+let socket;
 
 
 function SingleChat({fetchAgain, setFetchAgain}) {
@@ -37,17 +37,6 @@ function SingleChat({fetchAgain, setFetchAgain}) {
   };
 
   const { selectedChat, setSelectedChat, user, notification, setNotification } = ChatState();
-
-  useEffect(() => {
-    socket = io(ENDPOINT);
-    socket.emit('setup', user);
-    socket.on('connect', () => {
-    setSocketConnected(true);
-    console.log('Socket connected successfully');
-  });
-    socket.on('typing', () => setTyping(true));
-    socket.on('Stop typing', () => setTyping(false));
-  },[])
 
   const fetchMessages = async() =>{
     if(!selectedChat) return;
@@ -78,12 +67,7 @@ function SingleChat({fetchAgain, setFetchAgain}) {
     }
   }
 
-  useEffect(()=>{
-    fetchMessages();
-    selectedChatCompare = selectedChat;
-  },[selectedChat])
-
-  const sendMessage= async(e) => {
+    const sendMessage= async(e) => {
     if(e.key === 'Enter' && newMessage){
       socket.emit("stoptyping", selectedChat);
       try {
@@ -102,7 +86,7 @@ function SingleChat({fetchAgain, setFetchAgain}) {
           },
           config
         );
-        socket.emit("new message", data);
+        socket.emit("new-message", data);
         setMessages([...messages, data]);
       } catch (error) {
         console.log(error);
@@ -117,22 +101,54 @@ function SingleChat({fetchAgain, setFetchAgain}) {
       }
     }
   }
+
+  useEffect(() => {
+      socket = io(ENDPOINT);
+      socket.emit("setup", user);
+
+      socket.on("connect", () => {
+        setSocketConnected(true);
+        console.log(`Socket connected successfully ${socket.id}`);
+      });
+
+      socket.on("typing", () => setTyping(true));
+      socket.on("stop typing", () => setTyping(false));
+      console.log(typing)
+  },[])
+
+
+
+  useEffect(()=>{
+    fetchMessages();
+    selectedChatCompare = selectedChat;
+  },[selectedChat])
+
+  useEffect(() => {
+    socket.on("message recieved",(newMessageReceived)=>{
+      if (!selectedChatCompare || selectedChatCompare?._id !== newMessageReceived?.chat?._id) {
+        if (!notification.includes(newMessageReceived)) {
+          setNotification([newMessageReceived, ...notification]);
+          setFetchAgain(!fetchAgain);
+        }
+      } else {
+        setMessages([...messages, newMessageReceived]);
+      }
+    })
+  })
+  
+
+
   const typingHandler= async(e) => {
     setNewMessage(e.target.value);
     if(!socketConnected) return;
     if(!typing){
       setTyping(true);
-      socket.emit("typing",selectedChat);
-      let lastTypingTime = new Date().getTime();
-      var timerLength = 3000;
+      socket.emit("typing", selectedChat._id);
+
       setTimeout(() => {
-      var timeNow = new Date().getTime();
-      var timeDiff = timeNow - lastTypingTime;
-      if (timeDiff >= timerLength && typing) {
-        socket.emit("stoptyping", selectedChat);
-        setTyping(false);
-      }
-    }, timerLength);
+        socket.emit("stop typing", selectedChat._id);
+      setTyping(false);
+      }, 2000);
     }
   }
   
@@ -196,7 +212,7 @@ function SingleChat({fetchAgain, setFetchAgain}) {
               />
             ) : (
               <div className="messages">
-                <ScrollableChat messages={messages} />
+                <ScrollableChat messages={messages} className="scrollChatDiv"/>
               </div>
             )}
 
@@ -210,9 +226,8 @@ function SingleChat({fetchAgain, setFetchAgain}) {
                 <div>
                   <Lottie
                     options={defaultOptions}
-                    //height={50}
                     width={70}
-                    style={{ marginBottom: 15, marginLeft: 0 }}
+                    style={{marginBottom: 15, marginLeft: 0}}
                   />
                 </div>
               ) : (

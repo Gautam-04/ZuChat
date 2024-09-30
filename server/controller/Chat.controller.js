@@ -50,8 +50,7 @@ try {
             path: "latestMessage.sender",
             select: "username pic email"
         })
-        console.log(results);
-        return res.status(200).send(results)
+        return res.status(200).json(results)
     });
 
 } catch (error) {

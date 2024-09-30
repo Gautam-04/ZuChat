@@ -6,7 +6,7 @@ import { ChatState } from "../../Context/ChatContext";
 import { useNavigate } from "react-router-dom";
 
 function Chat() {
-  const [fetchAgain, setfetchAgain] = useState(false);
+  const [fetchAgain, setFetchAgain] = useState(false);
   const navigate = useNavigate()
   const{user} = ChatState()
   useEffect(() => {
@@ -17,7 +17,7 @@ function Chat() {
     <div style={{width: "100%"}}>
         <Box display='flex' justifyContent="space-around" w="100%" h="91.5vh" p="10px">
           <Mychats fetchChats={fetchAgain}/>
-          <Chatbox fetchChats={fetchAgain} setfetchChats={setfetchAgain}/>
+          <Chatbox fetchChats={fetchAgain} setFetchAgain={setFetchAgain}/>
         </Box>
     </div>
   )

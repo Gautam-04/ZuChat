@@ -7,10 +7,10 @@ import ChatProvider from './Context/ChatContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <ChakraProvider>
-  <BrowserRouter>
-  <ChatProvider>
-    <App />
-  </ChatProvider>
-  </BrowserRouter>
+    <BrowserRouter>
+      <ChatProvider>
+        <App />
+      </ChatProvider>
+    </BrowserRouter>
   </ChakraProvider>
 )

@@ -50,7 +50,6 @@ function Login() {
         isClosable: true,
         position: "bottom",
       })
-      console.log(data);
       localStorage.setItem('accessToken',data.data.accessToken)
       localStorage.setItem('user',JSON.stringify(data.data.loggedInUser));
       navigate('/chat');

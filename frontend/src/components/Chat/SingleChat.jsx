@@ -113,7 +113,6 @@ function SingleChat({fetchAgain, setFetchAgain}) {
 
       socket.on("typing", () => setTyping(true));
       socket.on("stop typing", () => setTyping(false));
-      console.log(typing)
   },[])
 
 

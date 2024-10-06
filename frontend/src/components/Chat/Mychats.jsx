@@ -29,7 +29,6 @@ function Mychats({fetchAgain}) {
       //http://localhost:8000
           const {data} = await axios.get('/api/v1/chat/fetchchat',config);
           setChats(data)
-          console.log(data)
       }
       catch (error) {
         console.log(error)

@@ -45,6 +45,7 @@ if(!createdUser){
 const options = {
         // httpOnly: true,
         secure: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
     };
 
 const accessToken = generateToken(user._id);
@@ -75,6 +76,7 @@ if(!isPasswordValid){
 const options = {
         // httpOnly: true,
         secure: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000
 }
 
 const loggedInUser = await User.findById(existedUser._id).select("-password")

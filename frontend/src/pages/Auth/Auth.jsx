@@ -15,7 +15,7 @@ function Auth() {
   useEffect(() => {
     if (user) navigate("/chat")
       else navigate('/auth')
-  },[])
+  },[navigate, user])
 
 
   return (

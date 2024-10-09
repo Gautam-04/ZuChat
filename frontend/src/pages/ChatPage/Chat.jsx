@@ -9,9 +9,10 @@ function Chat() {
   const [fetchAgain, setFetchAgain] = useState(false);
   const navigate = useNavigate()
   const{user} = ChatState()
+
   useEffect(() => {
     if(!user) navigate('/auth')
-  })
+  },[user,navigate])
   
   return (
     <div style={{width: "100%"}}>

@@ -35,7 +35,6 @@ try {
       select: "username avatar email",
     });
 
-    console.log(message)
     await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message });
 
     return res.status(200).json(message)

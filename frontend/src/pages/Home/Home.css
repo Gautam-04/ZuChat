@@ -1,10 +1,8 @@
-@import url('../../variable.css');
-
 .home_screen_maindiv {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    margin-top: 4.56rem;
+    margin-top: 2rem;
     padding: 0 5.37rem;
 }
 
@@ -14,7 +12,7 @@
 
 .Home_screen_title {
     font-family: Outfit;
-    font-size: 5rem;
+    font-size: 4rem;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
@@ -48,12 +46,17 @@
     }
 }
 
+.home_screen_2maindiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 3rem;
+}
+
 .taglineDiv {
     width: 36.5625rem;
     height: 2.4375rem;
     flex-shrink: 0;
-    margin-top: 3rem;
-    margin-left: 12.5rem;
     color: #6E00FF;
     font-family: Outfit;
     font-size: 2rem;
@@ -63,16 +66,14 @@
 }
 
 .buttonContainer {
-    width: 35%;
+    width: 20%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 2.35rem;
-    margin-left: 8.56rem;
 }
 
 .HomeLoginButton {
-    padding: 1rem 2.5rem !important;
+    padding: 2rem 2.5rem !important;
     border-radius: 0.5rem !important;
     background: var(--secondary-accent1) !important;
     color: var(--white) !important;
@@ -88,11 +89,12 @@
 }
 
 .HomeSignUpButton {
-    padding: 1rem 2.5rem !important;
+    padding: 2rem 2.5rem !important;
     justify-content: center !important;
     align-items: center !important;
     gap: 0.625rem !important;
     border-radius: 0.5rem !important;
+    border: 1px solid #000;
     font-family: Outfit !important;
     font-size: 1.125rem !important;
     font-style: normal !important;
@@ -103,6 +105,7 @@
 .ultimateHr {
     margin-top: 2.84rem;
     height: 0.0625rem;
+    color: #000;
     box-shadow: 2px 0px rgba(0, 0, 0, 0.25);
 }
 

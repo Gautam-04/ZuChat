@@ -17,10 +17,12 @@ function Homescreen() {
                 <img src={ChatingScreen} alt="noimg.png"  />
             </div>
         </div>
-        <div className="taglineDiv"><p>Lets the conversation begin</p></div>
-        <div className="buttonContainer">
-        <Link to="/auth"><Button className='HomeLoginButton'>Login</Button></Link>
-        <Link to="/auth"><Button backgroundColor={'grey'} className='HomeSignUpButton'>Sign Up</Button></Link>
+        <div className="home_screen_2maindiv">
+            <div className="taglineDiv"><p>Let the conversation begin</p></div>
+            <div className="buttonContainer">
+            <Link to="/auth"><Button className='HomeLoginButton'>Login</Button></Link>
+            <Link to="/auth"><Button className='HomeSignUpButton'>Sign Up</Button></Link>
+            </div>
         </div>
         <hr className='ultimateHr'/>
     </>

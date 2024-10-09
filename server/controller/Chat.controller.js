@@ -18,7 +18,7 @@ const accessChat = async(req,res) => {
 
     isChat = await User.populate(isChat,{
         path: "latestMessage.sender",
-        select: "username pic email",
+        select: "username avatar email",
     })
 
     if(isChat.length > 0){
@@ -48,7 +48,7 @@ try {
     .then(async(results)=>{
         results = await User.populate(results,{
             path: "latestMessage.sender",
-            select: "username pic email"
+            select: "username avatar email"
         })
         return res.status(200).json(results)
     });

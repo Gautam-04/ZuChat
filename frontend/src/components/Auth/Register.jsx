@@ -7,6 +7,7 @@ import { Button } from "@chakra-ui/button";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios"
 import {useNavigate} from 'react-router-dom';
+import { ChatState } from "../../Context/ChatContext";
 
 
 function Register() {
@@ -21,7 +22,9 @@ function Register() {
   const toast = useToast();
   const navigate = useNavigate();
 
-  const handleShow = () => {setShow(true)}
+  const handleShow = () => {setShow(!show)}
+
+  const {setUser} = ChatState() 
 //
   const submitHandler = async() => {
     setPicLoading(true)
@@ -36,6 +39,20 @@ function Register() {
       setPicLoading(false);
       return;
     }
+
+    const passwordRegex = /^(?=.*[#@]).{8,}$/;
+  if (!passwordRegex.test(password)) {
+    toast({
+      title: "Invalid Password",
+      description: "Password must be at least 8 characters long and include '#' or '@'.",
+      status: "warning",
+      duration: 5000,
+      isClosable: true,
+      position: "bottom",
+    });
+    setPicLoading(false);
+    return;
+  }
 
     try {
       const config = {
@@ -53,6 +70,7 @@ function Register() {
       })
       localStorage.setItem('accessToken',data.data.accessToken)
       localStorage.setItem('user',JSON.stringify(data.data.createdUser))
+      setUser(JSON.stringify(data.data.createdUser))
       navigate('/chat');
       setPicLoading(false);
     } catch (error) {

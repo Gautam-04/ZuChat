@@ -13,8 +13,8 @@ function Auth() {
   const {user} = ChatState();
   
   useEffect(() => {
-    if (user) navigate("/chat")
-      else navigate('/auth')
+    if (!user) navigate("/auth")
+      else navigate('/chat')
   },[navigate, user])
 
 

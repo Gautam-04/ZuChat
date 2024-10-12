@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import {Box,Stack, Text} from '@chakra-ui/layout'
-import { IconButton, Input, InputGroup, InputRightElement, useToast } from '@chakra-ui/react'
+import { Avatar, IconButton, Input, InputGroup, InputRightElement, useToast } from '@chakra-ui/react'
 import { FiSearch } from "react-icons/fi";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { ChatState } from "../../Context/ChatContext";
@@ -11,23 +11,25 @@ import {getSender} from "../../logic/ChatLogics"
 
 function Mychats({fetchAgain}) {
     const[email,setEmail] = useState("");
+    const [searchResult, setSearchResult] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [loadingChat, setLoadingChat] = useState(false);
 
     const toast = useToast()
 
-    const {user,chats,setChats,selectedChat,setSelectedChat} = ChatState();
+    const {user,chats,setChats,selectedChat,setSelectedChat,notification,setNotification,} = ChatState();
 
     const accessToken = localStorage.getItem("accessToken")
 
     const fetchChats = async() => {
-      
         try {
           const config = {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
       } 
-      //http://localhost:8000
           const {data} = await axios.get('/api/v1/chat/fetchchat',config);
+          // console.log(data)
           setChats(data)
       }
       catch (error) {
@@ -49,7 +51,71 @@ function Mychats({fetchAgain}) {
     }, [fetchAgain])
     
 
-    const handleSearch = async() => {};
+    const handleSearch = async() => {
+      if (!email) {
+      toast({
+        title: "Please Enter something in search",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "top-left",
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+
+      const { data } = await axios.post(`/api/v1/users/search`,{email}, config);
+
+      setLoading(false);
+      setSearchResult(data);
+    } catch (error) {
+      console.log(error)
+      toast({
+        title: "Error Occured!",
+        description: "Failed to Load the Search Results",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+    };
+
+    const accessChat = async (userId) => {
+    console.log(userId);
+
+    try {
+      setLoadingChat(true);
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      const { data } = await axios.post(`/api/v1/chat/accesschat`, { userId }, config);
+
+      if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
+      setSelectedChat(data);
+      setLoadingChat(false);
+    } catch (error) {
+      toast({
+        title: "Error fetching the chat",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  };
 
     const groupCreation = async() => {};
 
@@ -60,13 +126,77 @@ function Mychats({fetchAgain}) {
             <IconButton onClick={groupCreation} variant='outline' isRound={true} size="lg" icon={<AiOutlineUsergroupAdd />} border="none" />
         </div>
         <Box>
-            <InputGroup >
-            <Input placeholder="Search User by Email" size="md" variant="filled" value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
-            <InputRightElement>
-            <IconButton onClick={handleSearch} variant='outline' isRound={true} size="sm" icon={<FiSearch />} border="none" />
-            </InputRightElement>
-            </InputGroup>
-        </Box>
+        <InputGroup>
+          <Input
+            placeholder="Search User by Email"
+            size="md"
+            variant="filled"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <InputRightElement>
+            <IconButton
+              onClick={handleSearch}
+              variant="outline"
+              isRound={true}
+              size="sm"
+              icon={<FiSearch />}
+              border="none"
+            />
+          </InputRightElement>
+        </InputGroup>
+      </Box>
+
+{loading ? (
+        <ChatLoading />
+      ) : (
+        searchResult?.length > 0 && (
+          <Box
+            display="flex"
+            flexDir="column"
+            p={3}
+            bg="#F8F8F8"
+            w="100%"
+            borderRadius="lg"
+            overflowY="auto"
+            mt={"1rem"}
+          >
+            <Stack overflowY="auto">
+              {searchResult.map((user) => (
+                <Box
+                  key={user._id}
+                  onClick={() => accessChat(user._id)}
+                  cursor="pointer"
+                  bg="#E8E8E8"
+                  px={3}
+                  py={2}
+                  borderRadius="lg"
+                  display="flex"
+                  alignItems="center"
+                >
+                  <Avatar
+                    src={user.avatar} // Replace with actual avatar source
+                    alt={user.username} // Replace with actual alt text
+                    borderRadius="full"
+                    boxSize="40px"
+                    mr={3} // Add margin-right for spacing
+                  />
+                  <Box>
+                    <Text fontWeight="bold" fontSize="md">
+                      {user.username}
+                    </Text>
+                    <Text fontSize="sm" color="#000">
+                      {user.email}
+                    </Text>
+                  </Box>
+                </Box>
+              ))}
+            </Stack>
+          </Box>
+        )
+      )}
+
+{/* Existing Chats */}
         <Box display="flex" flexDir="column" p={3} bg="#F8F8F8" w="100%" h="100%" borderRadius="lg" overflowY="hidden" mt={"1rem"}>
         {chats ? (
           <Stack overflowY="auto">
@@ -80,20 +210,43 @@ function Mychats({fetchAgain}) {
                 py={2}
                 borderRadius="lg"
                 key={chat._id}
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
               >
-                <Text>
-                  {!chat.isGroupChat
-                    ? getSender(user._id, chat.users)
-                    : chat.chatName}
-                </Text>
-                {chat.latestMessage && (
-                  <Text fontSize="xs">
-                    <b>{chat.latestMessage.sender.username} : </b>
-                    {chat.latestMessage.content.length > 50
-                      ? chat.latestMessage.content.substring(0, 51) + "..."
-                      : chat.latestMessage.content}
-                  </Text>
-                )}
+              
+                <Box display="flex" alignItems="center">
+    <Avatar
+      src={chat.latestMessage?.sender?.avatar} // Replace with actual avatar source
+      alt={chat.latestMessage?.sender?.username}  // Replace with actual alt text
+      borderRadius="full"
+      boxSize="40px"
+      mr={3} // Add margin-right for spacing
+    />
+    <Box>
+      <Text fontWeight="bold" fontSize="md">
+        {!chat.isGroupChat ? getSender(user._id, chat.users) : chat.chatName}
+      </Text>
+      {chat.latestMessage && (
+        <Text fontSize="sm" color="#000">
+          <b>{chat.latestMessage.sender.username}:</b>{" "}
+          {chat.latestMessage.content.length > 50
+            ? chat.latestMessage.content.substring(0, 51) + "..."
+            : chat.latestMessage.content}
+        </Text>
+      )}
+    </Box>
+  </Box>
+
+  {/* Time Section */}
+  <Box textAlign="right">
+    <Text fontSize="xs" color="#000">
+      {new Date(chat.latestMessage?.createdAt).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      })}
+    </Text>
+  </Box>
               </Box>
             ))}
           </Stack>

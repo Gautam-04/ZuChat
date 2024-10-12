@@ -5,7 +5,7 @@ function Footer() {
   return (
     <section className="footer">
       <div className="footer-heading">
-        <div className="footer-title">TaxSarthi</div>
+        <div className="footer-title">ZUCHAT</div>
         <div className="footer-icons">
           <a
             className="mail_icon"

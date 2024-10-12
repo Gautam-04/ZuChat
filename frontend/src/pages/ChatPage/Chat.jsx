@@ -11,6 +11,7 @@ function Chat() {
   const{user} = ChatState()
 
   useEffect(() => {
+    console.log(user)
     if(!user) navigate('/auth')
   },[user,navigate])
   

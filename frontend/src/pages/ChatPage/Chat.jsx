@@ -11,10 +11,11 @@ function Chat() {
   const{user} = ChatState()
 
   useEffect(() => {
-    console.log(user)
-    if(!user) navigate('/auth')
-  },[user,navigate])
-  
+    if (!user) {
+      navigate("/auth"); 
+    }
+  }, [user, navigate]);
+
   return (
     <div style={{width: "100%"}}>
         <Box display='flex' justifyContent="space-around" w="100%" h="91.5vh" p="10px">

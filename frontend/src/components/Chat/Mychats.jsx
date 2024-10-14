@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import {Box,Stack, Text} from '@chakra-ui/layout'
@@ -17,7 +19,7 @@ function Mychats({fetchAgain}) {
 
     const toast = useToast()
 
-    const {user,chats,setChats,selectedChat,setSelectedChat,notification,setNotification,} = ChatState();
+    const {user,chats,setChats,selectedChat,setSelectedChat,} = ChatState();
 
     const accessToken = localStorage.getItem("accessToken")
 
@@ -46,9 +48,10 @@ function Mychats({fetchAgain}) {
     };
 
     useEffect(() => {
-      fetchChats();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fetchAgain])
+      setTimeout(() => {
+        fetchChats();
+      }, 200);
+    }, [fetchAgain,chats])
     
 
     const handleSearch = async() => {
@@ -73,9 +76,9 @@ function Mychats({fetchAgain}) {
       };
 
       const { data } = await axios.post(`/api/v1/users/search`,{email}, config);
-
       setLoading(false);
-      setSearchResult(data);
+      setEmail("")
+      setSearchResult([data.user]);
     } catch (error) {
       console.log(error)
       toast({
@@ -90,8 +93,6 @@ function Mychats({fetchAgain}) {
     };
 
     const accessChat = async (userId) => {
-    console.log(userId);
-
     try {
       setLoadingChat(true);
       const config = {
@@ -103,7 +104,7 @@ function Mychats({fetchAgain}) {
       const { data } = await axios.post(`/api/v1/chat/accesschat`, { userId }, config);
 
       if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
-      setSelectedChat(data);
+      setSelectedChat(data.FullChat);
       setLoadingChat(false);
     } catch (error) {
       toast({
@@ -158,7 +159,6 @@ function Mychats({fetchAgain}) {
             bg="#F8F8F8"
             w="100%"
             borderRadius="lg"
-            overflowY="auto"
             mt={"1rem"}
           >
             <Stack overflowY="auto">
@@ -225,7 +225,7 @@ function Mychats({fetchAgain}) {
     />
     <Box>
       <Text fontWeight="bold" fontSize="md">
-        {!chat.isGroupChat ? getSender(user._id, chat.users) : chat.chatName}
+        {!chat.isGroupChat ? getSender(user, chat.users) : chat.chatName}
       </Text>
       {chat.latestMessage && (
         <Text fontSize="sm" color="#000">

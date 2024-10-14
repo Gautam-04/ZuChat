@@ -14,7 +14,7 @@ var selectedChatCompare;
 import { MdCall, MdVideocam } from "react-icons/md";
 import { FiMoreVertical } from "react-icons/fi";
 import ScrollableChat from "./ScrollableChat";
-import ProfileModal from "../miscellaneous/ProfileModal";
+// import ProfileModal from "../miscellaneous/ProfileModal";
 import Lottie from "react-lottie";
 const ENDPOINT = "http://localhost:8000";
 let socket;
@@ -39,11 +39,10 @@ function SingleChat({fetchAgain, setFetchAgain}) {
     },
   };
 
-  const { selectedChat, setSelectedChat, user, notification, setNotification } = ChatState();
+  const { selectedChat, user, notification, setNotification } = ChatState();
 
   const fetchMessages = async() =>{
     if(!selectedChat) return;
-
     try {
       const config = {
         headers: {

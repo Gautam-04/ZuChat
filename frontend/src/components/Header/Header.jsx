@@ -46,7 +46,7 @@ function Header() {
   return (
     <div className="HeaderCompleteDiv">
     {user ? (
-          <IconButton aria-label="Profile" icon={<FaUserCircle />} />
+          <IconButton aria-label="Profile" icon={<FaUserCircle />} onClick={()=>navigate('/')}/>
       ) : null}
 
       <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
@@ -56,7 +56,7 @@ function Header() {
 
         {user ? (
         <HStack spacing={4} position="relative">
-          <IconButton aria-label="Home" icon={<FaHome />} />
+          <IconButton aria-label="Home" onClick={()=>navigate('/')} icon={<FaHome />} />
           
           {/* Notification icon with counter badge */}
           <Box position="relative">

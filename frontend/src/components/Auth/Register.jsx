@@ -70,7 +70,7 @@ function Register() {
       })
       localStorage.setItem('accessToken',data.data.accessToken)
       localStorage.setItem('user',JSON.stringify(data.data.createdUser))
-      setUser(JSON.stringify(data.data.createdUser))
+      setUser(data.data.createdUser);
       navigate('/chat');
       setPicLoading(false);
     } catch (error) {

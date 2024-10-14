@@ -55,7 +55,7 @@ function Login() {
       })
       localStorage.setItem('accessToken',data.data.accessToken)
       localStorage.setItem('user',JSON.stringify(data.data.loggedInUser));
-      setUser(JSON.stringify(data.data.loggedInUser))
+      setUser(data.data.loggedInUser);
       navigate('/chat');
       setPicLoading(false);
     } catch (error) {

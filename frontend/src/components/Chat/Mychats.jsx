@@ -51,7 +51,13 @@ function Mychats({fetchAgain}) {
       setTimeout(() => {
         fetchChats();
       }, 200);
-    }, [fetchAgain,chats])
+    }, [fetchAgain])
+
+    useEffect(() => {
+      setTimeout(() => {
+        fetchChats();
+      }, 10000);
+    }, [chats])
     
 
     const handleSearch = async() => {
@@ -230,8 +236,8 @@ function Mychats({fetchAgain}) {
       {chat.latestMessage && (
         <Text fontSize="sm" color="#000">
           <b>{chat.latestMessage.sender.username}:</b>{" "}
-          {chat.latestMessage.content.length > 50
-            ? chat.latestMessage.content.substring(0, 51) + "..."
+          {chat.latestMessage.content.length > 20
+            ? chat.latestMessage.content.substring(0, 21) + "..."
             : chat.latestMessage.content}
         </Text>
       )}

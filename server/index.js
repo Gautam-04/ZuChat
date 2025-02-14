@@ -57,6 +57,10 @@ io.on('connection',(socket)=>{
     })
 })
 
+app.get('/',(req,res)=>{
+    res.send("<h1>Server is running</h1>")
+})
+
 server.listen(process.env.PORT || 8000,()=>{
     console.log(`Server connected at port ${process.env.PORT}`)
 })

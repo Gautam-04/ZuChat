@@ -1,12 +1,12 @@
 import { UploadToCloudinary } from "../util/Cloudinary.js";
-import { User } from "../model/user.model.js";
+import {User} from "../model/user.model.js";
 import { generateToken } from "../config/generateToken.js";
 
 const registerUser = async(req,res) => {
-    const {username,email,dob,password} = req.body;
+    const {username,email,dob,password,avatarUrl} = req.body;
 
 
-    if([username,email,dob,password].some((field)=>field?.trim === '')){
+    if([username,email,dob,password,avatarUrl].some((field)=>field?.trim === '')){
         return res.status(400).json({message: "Please fill all the necessary details",errorData: "Please fill all the necessary details"})
     }
 
@@ -18,20 +18,13 @@ const registerUser = async(req,res) => {
         return res.status(400).json({message: "User already exists pls use different email or username",errorData: "User already exists pls use different email or username"})
     }
 
-const localFileCopy = req.files?.avatar[0].path;
-
-const response = await UploadToCloudinary(localFileCopy);
-
-if(!response){
-    return res.status(400).json({message: 'Cannot upload image currently',errorData: 'Cannot upload image currently',response});
-}
 
 const user = await User.create({
     username,
     email,
     dob,
     password,
-    avatar: response?.url
+    avatarUrl
 })
 
 const createdUser = await User.findById(user._id).select(

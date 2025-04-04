@@ -7,7 +7,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api' :{
-        target: 'https://zuchat-backend.vercel.app',
+        // target: 'https://zuchat-backend.vercel.app',
+        target: 'http://localhost:8000',
         changeOrigin: true,
         secure: false
       }

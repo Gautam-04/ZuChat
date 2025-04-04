@@ -1,15 +1,19 @@
 import { app } from "./app.js";
 import dotenv from "dotenv"
 import connectDb from "./config/DbConfig.js";
+import {sequelize} from "./config/Sequelize.js";
 import { Server } from "socket.io";
 import { createServer } from 'node:http';
 
+//docker run -d -p 8000:8000 --env-file ./.env zuchat-backend  command to run the docker container for backend
+//docker run -d -p 3000:80 zuchat  command to run the docker container for frontend
 dotenv.config({
     path: './env'
 })
 
 
 connectDb()
+
 
 const server = createServer(app);
 

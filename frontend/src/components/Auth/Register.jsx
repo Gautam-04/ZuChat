@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { VStack } from "@chakra-ui/layout";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
@@ -8,6 +8,7 @@ import { useToast } from "@chakra-ui/toast";
 import axios from "axios"
 import {useNavigate} from 'react-router-dom';
 import { ChatState } from "../../Context/ChatContext";
+import {uploadToS3} from "../../utils/s3bucket"
 
 
 function Register() {
@@ -25,22 +26,29 @@ function Register() {
   const handleShow = () => {setShow(!show)}
 
   const {setUser} = ChatState() 
-//
-  const submitHandler = async() => {
-    setPicLoading(true)
-    if (!username || !email || !password || !dob) {
-      toast({
-        title: "Please Fill all the Feilds",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      setPicLoading(false);
-      return;
-    }
 
-    const passwordRegex = /^(?=.*[#@]).{8,}$/;
+  // useEffect(() => {
+  //   setAvatarUrl()
+  // },[avatar])
+//
+const submitHandler = async() => {
+  setPicLoading(true);
+  
+  // Form validation
+  if (!username || !email || !password || !dob) {
+    toast({
+      title: "Please Fill all the Fields",  // Fixed typo in "Fields"
+      status: "warning",
+      duration: 5000,
+      isClosable: true,
+      position: "bottom",
+    });
+    setPicLoading(false);
+    return;
+  }
+  
+  // Password validation
+  const passwordRegex = /^(?=.*[#@]).{8,}$/;
   if (!passwordRegex.test(password)) {
     toast({
       title: "Invalid Password",
@@ -54,38 +62,82 @@ function Register() {
     return;
   }
 
-    try {
-      const config = {
-        headers: {
-          "Content-type": "multipart/form-data"
-        }
-      }
-      const data = await axios.post("/api/v1/users/register",{username,email,dob,password,avatar},config);
+  // Avatar validation  
+  if (!avatar) {
+    toast({
+      title: "Please select a profile picture",
+      status: "warning",
+      duration: 5000,
+      isClosable: true,
+      position: "bottom",
+    });
+    setPicLoading(false);
+    return;
+  }
+  
+  try {
+    // Upload image first and wait for URL
+    const uploadedAvatarUrl = await uploadToS3(avatar);
+    
+    if (!uploadedAvatarUrl) {
       toast({
-        title: "User Created Successfully",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      })
-      localStorage.setItem('accessToken',data.data.accessToken)
-      localStorage.setItem('user',JSON.stringify(data.data.createdUser))
-      setUser(data.data.createdUser);
-      navigate('/chat');
-      setPicLoading(false);
-    } catch (error) {
-      console.log(error)
-      toast({
-        title: "Error Occured!",
-        description: error.response.data.message,
+        title: "Error Occurred!",
+        description: "Failed to upload image. Please try again.",
         status: "error",
         duration: 5000,
         isClosable: true,
         position: "bottom",
       });
       setPicLoading(false);
+      return;
     }
+    
+    // Set the correct content type for JSON data
+    const config = {
+      headers: {
+        "Content-type": "application/json"
+      }
+    };
+    
+    // Now use the returned URL from the upload function
+    const response = await axios.post(
+      "/api/v1/users/register",
+      {
+        username,
+        email,
+        dob,
+        password,
+        avatarUrl: uploadedAvatarUrl  // Use the URL from the upload function
+      },
+      config
+    );
+    
+    toast({
+      title: "User Created Successfully",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+      position: "bottom",
+    });
+    
+    localStorage.setItem('accessToken', response.data.accessToken);
+    localStorage.setItem('user', JSON.stringify(response.data.createdUser));
+    setUser(response.data.createdUser);
+    navigate('/chat');
+  } catch (error) {
+    console.log(error);
+    toast({
+      title: "Error Occurred!",
+      description: error.response?.data?.message || "Something went wrong",
+      status: "error",
+      duration: 5000,
+      isClosable: true,
+      position: "bottom",
+    });
+  } finally {
+    setPicLoading(false);
   }
+};
 
   return (
     <VStack spacing="5px">

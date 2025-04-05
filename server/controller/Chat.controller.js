@@ -1,62 +1,94 @@
 import {Chat} from '../model/chat.model.js'
 import { User } from '../model/user.model.js';
 
-const accessChat = async(req,res) => {
-    const { userId } = req.body;
-    if(!userId){
-        console.log('UserId not sent with the req');
-        return res.status(400).json({message: 'User id is not found'})
+const accessChat = async (req, res) => {
+  const { userId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ message: "User ID is required." });
+  }
+
+  try {
+    const existingChat = await Chat.findOne({
+      isGroupChat: false,
+      "users.id": req.userId,
+      "users.id": userId,
+    }).populate("latestMessage").sort({ updatedAt: -1 });
+
+    // If chat exists, attach sender info from SQL
+    if (existingChat) {
+      if (existingChat.latestMessage?.sender) {
+        const sender = await User.findOne({
+          where: { id: existingChat.latestMessage.sender },
+          attributes: ["id", "username", "avatarUrl", "email"],
+          raw: true,
+        });
+
+        if (sender) {
+          existingChat.latestMessage = {
+            ...existingChat.latestMessage.toObject?.() || existingChat.latestMessage,
+            sender,
+          };
+        }
+      }
+
+      return res.status(200).json(existingChat);
     }
 
-    var isChat = await Chat.find({
-        isGroupChat: false,
-        $and: [
-            {users: {$elemMatch: {$eq: req.user._id}}},
-            {users: {$elemMatch: {$eq: userId}}}
-        ]
-    }).populate("users", "-password").populate("latestMessage")
+    // If chat doesn't exist, fetch both users from SQL
+    const [user1, user2] = await Promise.all([
+      User.findOne({
+        where: { id: req.userId },
+        attributes: ["id", "username", "avatarUrl", "email"],
+        raw: true,
+      }),
+      User.findOne({
+        where: { id: userId },
+        attributes: ["id", "username", "avatarUrl", "email"],
+        raw: true,
+      }),
+    ]);
 
-    isChat = await User.populate(isChat,{
-        path: "latestMessage.sender",
-        select: "username avatar email",
+    if (!user1 || !user2) {
+      return res.status(404).json({ message: "One or both users not found." });
+    }
+
+    const chatData = {
+      chatName: "sender",
+      isGroupChat: false,
+      users: [user1, user2], // embed user objects directly
+    };
+
+    const createdChat = await Chat.create(chatData);
+    const fullChat = await Chat.findById(createdChat._id).populate("latestMessage");
+
+    return res.status(200).json({ message: "Chat created successfully", chat: fullChat });
+
+  } catch (error) {
+    console.error("Access Chat Error:", error);
+    return res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
+const fetchChats = async (req, res) => {
+  try {
+    const results = await Chat.find({
+      "users.id": req.userId, 
     })
+      .populate("latestMessage") // This will include embedded sender
+      .sort({ updatedAt: -1 });
 
-    if(isChat.length > 0){
-        return res.send(isChat[0]);
-    }else{
-        var chatData = {
-            chatName : "sender",
-            isGroupChat: false,
-            users: [req.user._id,userId]
-        }
-
-        try {
-            const createdChat = await Chat.create(chatData);
-            const FullChat = await Chat.findOne({_id: createdChat._id}).populate("users", "-password");
-            return res.status(200).json({'message': 'chat shared successfully',FullChat})
-        } catch (error) {
-            return res.status(400).json({'message': error.message})
-        }
-
-    }
-}
-
-const fetchChats = async(req,res) => {
-try {
-    await Chat.find({users: {$elemMatch: {$eq: req.user._id}}})
-    .populate("users","-password").populate("groupAdmin","-password").populate("latestMessage").sort({updatedAt: -1})
-    .then(async(results)=>{
-        results = await User.populate(results,{
-            path: "latestMessage.sender",
-            select: "username avatar email"
-        })
-        return res.status(200).json(results)
+    return res.status(200).json(results);
+  } catch (error) {
+    console.error("Fetch Chats Error:", error);
+    return res.status(500).json({
+      message: "There was an error in fetching chats",
+      error: error.message,
     });
+  }
+};
 
-} catch (error) {
-    return res.status(200).json({'message': 'There was a error in fetching data',error})
-}
-}
 
 const createGroupChats = async(req,res) => {
     if(!req.body.users || !req.body.chatName) {

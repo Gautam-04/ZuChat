@@ -11,8 +11,20 @@ dotenv.config({
     path: './env'
 })
 
+const initializeDatabase = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Connection to RDS has been established successfully.');
+    await sequelize.sync({ alter: true });
+    console.log('Database synchronized.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+};
+
 
 connectDb()
+initializeDatabase();
 
 
 const server = createServer(app);

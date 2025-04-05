@@ -4,46 +4,63 @@ import { Chat } from "../model/chat.model.js"
 
 const allMessages = async(req,res)=>{
 try {
-    const messages = await Message.find({chat: req.params.chatId}).populate("sender", "username avatar email").populate("chat")
-    return res.status(200).json({message: "Messages loaded successfully",messages})
-} catch (error) {
-    console.log("Error in getting message from connection")
-    return res.status(400).json({message: "There is a error in backend",error})
-}
+    const messages = await Message.find({ chat: req.params.chatId }).populate("chat");
+
+    return res.status(200).json({
+      message: "Messages loaded successfully",
+      messages,
+    });
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    return res.status(400).json({
+      message: "There was an error fetching messages",
+      error: error.message,
+    });
+  }
 }
 
-const sendMessage = async(req,res) => {
-const {content,chatId} = req.body;
-if(!content || !chatId){
+const sendMessage = async (req, res) => {
+  const { content, chatId } = req.body;
+
+  if (!content || !chatId) {
     console.log("Invalid data passed into request");
-    return res.status(400).json({message: "Content/ChatId is necessary"});
-}
+    return res.status(400).json({ message: "Content and ChatId are required" });
+  }
 
-var newMessage = {
-    sender: req.user?._id,
-    content: content,
-    chat: chatId
-}
-
-try {
-    var message = await Message.create(newMessage);
-
-    message = await message.populate("sender","username avatar");
-    message = await message.populate("chat");
-    message = await User.populate(message, {
-      path: "chat.users",
-      select: "username avatar email",
+  try {
+    const sender = await User.findOne({
+      where: { id: req.userId },
+      attributes: ["id", "username", "avatarUrl", "email"],
+      raw: true,
     });
 
-    await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message });
+    if (!sender) {
+      return res.status(404).json({ message: "Sender not found in SQL DB" });
+    }
 
-    return res.status(200).json(message)
-} catch (error) {
-    console.log("Error in sending message from connection")
-    return res.status(400).json({message: `There is a error in sending message ${error}`})
-}
+    // Create message with embedded sender
+    const newMessage = await Message.create({
+      sender,
+      content,
+      chat: chatId,
+    });
 
+    // Populate chat users
+    const populatedMessage = await Message.findById(newMessage._id).populate({
+      path: "chat",
+      populate: {
+        path: "users",
+        select: "-password", // or only select fields if needed
+      },
+    });
 
-}
+    // Update latest message in the chat
+    await Chat.findByIdAndUpdate(chatId, { latestMessage: newMessage });
 
+    return res.status(200).json(populatedMessage);
+  } catch (error) {
+    console.error("Error sending message:", error);
+    return res.status(400).json({ message: "Error sending message", error: error.message });
+  }
+};
 export {allMessages,sendMessage}

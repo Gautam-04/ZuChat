@@ -46,7 +46,7 @@ function SingleChat({fetchAgain, setFetchAgain}) {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user._id}`,
+          Authorization: `Bearer ${user.id}`,
         }
       }
 
@@ -174,7 +174,7 @@ function SingleChat({fetchAgain, setFetchAgain}) {
       >
         <Box display="flex" alignItems="center">
           <Image
-            src={getSenderFull(user, selectedChat.users).avatar}
+            src={getSenderFull(user, selectedChat.users).avatarUrl}
             alt={getSenderFull(user, selectedChat.users).username}
             borderRadius="full"
             boxSize="40px"

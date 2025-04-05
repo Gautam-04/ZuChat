@@ -48,15 +48,11 @@ function Mychats({fetchAgain}) {
     };
 
     useEffect(() => {
-      setTimeout(() => {
-        fetchChats();
-      }, 200);
-    }, [fetchAgain])
+  fetchChats(); 
+}, [fetchAgain]);
 
     useEffect(() => {
-      setTimeout(() => {
         fetchChats();
-      }, 10000);
     }, [chats])
     
 
@@ -82,9 +78,10 @@ function Mychats({fetchAgain}) {
       };
 
       const { data } = await axios.post(`/api/v1/users/search`,{email}, config);
+      console.log(data)
       setLoading(false);
       setEmail("")
-      setSearchResult([data.user]);
+      setSearchResult([data.searchedUser]);
     } catch (error) {
       console.log(error)
       toast({
@@ -108,9 +105,10 @@ function Mychats({fetchAgain}) {
         },
       };
       const { data } = await axios.post(`/api/v1/chat/accesschat`, { userId }, config);
+      console.log(data)
 
-      if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
-      setSelectedChat(data.FullChat);
+      if (!chats.find((c) => c.id === data.id)) setChats([data, ...chats]);
+      setSelectedChat(data.fullChat);
       setLoadingChat(false);
     } catch (error) {
       toast({
@@ -170,8 +168,8 @@ function Mychats({fetchAgain}) {
             <Stack overflowY="auto">
               {searchResult.map((user) => (
                 <Box
-                  key={user._id}
-                  onClick={() => accessChat(user._id)}
+                  key={user.id}
+                  onClick={() => accessChat(user.id)}
                   cursor="pointer"
                   bg="#E8E8E8"
                   px={3}
@@ -181,8 +179,8 @@ function Mychats({fetchAgain}) {
                   alignItems="center"
                 >
                   <Avatar
-                    src={user.avatar} // Replace with actual avatar source
-                    alt={user.username} // Replace with actual alt text
+                    src={user?.avatarUrl} // Replace with actual avatar source
+                    alt={user?.username} // Replace with actual alt text
                     borderRadius="full"
                     boxSize="40px"
                     mr={3} // Add margin-right for spacing
@@ -223,7 +221,7 @@ function Mychats({fetchAgain}) {
               
                 <Box display="flex" alignItems="center">
     <Avatar
-      src={chat.latestMessage?.sender?.avatar} // Replace with actual avatar source
+      src={chat.latestMessage?.sender?.avatarUrl} // Replace with actual avatar source
       alt={chat.latestMessage?.sender?.username}  // Replace with actual alt text
       borderRadius="full"
       boxSize="40px"

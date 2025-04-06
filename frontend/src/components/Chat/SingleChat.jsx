@@ -20,13 +20,14 @@ const ENDPOINT = "http://localhost:8000";
 let socket;
 
 
-function SingleChat({fetchAgain, setFetchAgain}) {
+function SingleChat({ fetchAgain = false, setFetchAgain = () => {} }) {
   const [messages,setMessages] = useState([]);
   const [loading,setLoading] = useState(false);
   const [newMessage,setNewMessage] = useState("");
   const [socketConnected,setSocketConnected] = useState(false);
   const [typing,setTyping] = useState(false);
   const toast = useToast();
+  console.log(fetchAgain);
 
   const messagesEndRef = useRef(null);
 
@@ -50,7 +51,6 @@ function SingleChat({fetchAgain, setFetchAgain}) {
         }
       }
 
-      setLoading(true);
       const {data} = await axios.post(`/api/v1/message/${selectedChat._id}`,config);
       setMessages(data.messages);
       setLoading(false);
@@ -118,14 +118,20 @@ function SingleChat({fetchAgain, setFetchAgain}) {
   },[])
 
 
+useEffect(() => {
+  fetchMessages();
+  selectedChatCompare = selectedChat;
 
-  useEffect(()=>{
+  const interval = setInterval(() => {
     fetchMessages();
-    selectedChatCompare = selectedChat;
-  },[selectedChat])
+  }, 3000); // 10 seconds
+
+  return () => clearInterval(interval); // cleanup on unmount or when chat changes
+}, [selectedChat]);
 
   useEffect(() => {
     socket.on("message recieved",(newMessageReceived)=>{
+      console.log(newMessageReceived);
       if (!selectedChatCompare || selectedChatCompare?._id !== newMessageReceived?.chat?._id) {
         if (!notification.includes(newMessageReceived)) {
           setNotification([newMessageReceived, ...notification]);

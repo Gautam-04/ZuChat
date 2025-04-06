@@ -9,7 +9,7 @@ import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { ChatState } from "../../Context/ChatContext";
 import axios from "axios";
 import ChatLoading from "../../Animations/Context";
-import {getSender} from "../../logic/ChatLogics"
+import {getSender, getSenderProfile} from "../../logic/ChatLogics"
 
 function Mychats({fetchAgain}) {
     const[email,setEmail] = useState("");
@@ -31,7 +31,6 @@ function Mychats({fetchAgain}) {
         }
       } 
           const {data} = await axios.get('/api/v1/chat/fetchchat',config);
-          // console.log(data)
           setChats(data)
       }
       catch (error) {
@@ -221,7 +220,7 @@ function Mychats({fetchAgain}) {
               
                 <Box display="flex" alignItems="center">
     <Avatar
-      src={chat.latestMessage?.sender?.avatarUrl} // Replace with actual avatar source
+      src={!chat.isGroupChat ? getSenderProfile(user, chat.users) : chat.latestMessage?.sender?.avatarUrl} // Replace with actual avatar source
       alt={chat.latestMessage?.sender?.username}  // Replace with actual alt text
       borderRadius="full"
       boxSize="40px"

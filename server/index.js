@@ -42,7 +42,7 @@ io.on('connection',(socket)=>{
 
     socket.on('setup',(user)=>{
         socket.join(user?._id);
-        socket.emit(`User connected${user?._id}`)
+        socket.emit(`User connected${user?.id}`)
     })
 
     socket.on("join room",(room)=>{
@@ -56,20 +56,19 @@ io.on('connection',(socket)=>{
     socket.on("new-message", (newMessageReceived)=>{
 
         var chat = newMessageReceived.chat;
-        console.log(chat)
 
         if(!chat.users) return console.log("chat.users not defined");
 
         chat.users.forEach((user)=>{
-            if(user._id == newMessageReceived.sender._id)    return;
+            if(user.id == newMessageReceived.sender.id) return;
 
-            socket.in(user._id).emit("message recieved",newMessageReceived)
+            socket.in(user.id).emit("message recieved",newMessageReceived)
         })
     })
 
     socket.off("setup",()=>{
         console.log('User is disconnected');
-        socket.leave(userData._id)
+        socket.leave(userData.id)
     })
 })
 

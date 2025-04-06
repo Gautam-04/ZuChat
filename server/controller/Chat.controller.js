@@ -71,23 +71,23 @@ const accessChat = async (req, res) => {
 };
 
 
-const fetchChats = async (req, res) => {
-  try {
-    const results = await Chat.find({
-      "users.id": req.userId, 
-    })
-      .populate("latestMessage") // This will include embedded sender
-      .sort({ updatedAt: -1 });
+  const fetchChats = async (req, res) => {
+    try {
+      const results = await Chat.find({
+        "users.id": req.userId, 
+      })
+        .populate("latestMessage") // This will include embedded sender
+        .sort({ updatedAt: -1 });
 
-    return res.status(200).json(results);
-  } catch (error) {
-    console.error("Fetch Chats Error:", error);
-    return res.status(500).json({
-      message: "There was an error in fetching chats",
-      error: error.message,
-    });
-  }
-};
+      return res.status(200).json(results);
+    } catch (error) {
+      console.error("Fetch Chats Error:", error);
+      return res.status(500).json({
+        message: "There was an error in fetching chats",
+        error: error.message,
+      });
+    }
+  };
 
 
 const createGroupChats = async(req,res) => {

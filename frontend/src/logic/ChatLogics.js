@@ -43,6 +43,14 @@ export const getSender = (loggedUser, users) => {
   return users[0]?.id === loggedUser?.id ? users[1].username : users[0].username;
 };
 
+export const getSenderProfile = (loggedUser, users) => {
+  if (!users || users.length < 2) {
+    return "Unknown Sender"; // Return a fallback value
+  }
+  return users[0]?.id === loggedUser?.id ? users[1].avatarUrl : users[0].avatarUrl;
+};
+
+
 export const getSenderFull = (loggedUser, users) => {
   if (!users || users.length === 0) return {};
   return users[0].id === loggedUser.id ? users[1] : users[0];

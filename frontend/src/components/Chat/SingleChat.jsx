@@ -16,7 +16,7 @@ import { FiMoreVertical } from "react-icons/fi";
 import ScrollableChat from "./ScrollableChat";
 // import ProfileModal from "../miscellaneous/ProfileModal";
 import Lottie from "react-lottie";
-const ENDPOINT = "http://13.49.76.253:8000";
+const ENDPOINT = "http://13.49.76.253:8080";
 let socket;
 
 
